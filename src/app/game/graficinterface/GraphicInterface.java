@@ -23,7 +23,7 @@ public class GraphicInterface {
 
 	public void drawBackground(Background background) {
 		for(Star star : background.getStars()){
-			star.move(GameExecution.millisSinceLastUpdate);
+			star.move();
 			drawStar(star);
 		}
 	}
@@ -87,7 +87,7 @@ public class GraphicInterface {
 	}
 
 	private void drawStar(Star star) {
-		GameLib.setColor(star.color);
-		GameLib.fillRect(star.x, (star.y + star.count) % GameLib.HEIGHT, star.width, star.height);
+		GameLib.setColor(star.getAppearance().getColor());
+		GameLib.fillRect(star.getLocalization().getX(), (star.getLocalization().getY()) % GameLib.HEIGHT, star.getAppearance().getRadius(), star.getAppearance().getRadius());
 	}
 }

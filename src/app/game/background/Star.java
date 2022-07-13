@@ -1,29 +1,38 @@
 package game.background;
 
+import game.GameExecution;
 import game.api.GameLib;
+import game.attributes.Appearance;
+import game.attributes.Format;
+import game.attributes.Localization;
+import game.attributes.Velocity;
 
 import java.awt.*;
 
 public class Star {
-	public double x;
-	public double y;
-	public double speed;
-	public double count;
-	public double width;
-	public double height;
-	public Color color;
+	private final Localization localization;
+	private final Velocity velocity;
+	private final Appearance appearance;
 
-	public Star(double speed, double width, double height, Color color) {
-		this.speed = speed;
-		this.x = Math.random() * GameLib.WIDTH;
-		this.y = Math.random() * GameLib.HEIGHT;
-		this.count = 0;
-		this.width = width;
-		this.height = height;
-		this.color = color;
+	public Star(double speed, int radius, Color color) {
+		this.velocity = new Velocity(speed);
+		this.localization = new Localization(Math.random() * GameLib.WIDTH, Math.random() * GameLib.HEIGHT);
+		this.appearance = new Appearance(Format.CIRCLE, color, radius);
 	}
 
-	public void move(long delta) {
-		this.count += this.speed * delta;
+	public Localization getLocalization() {
+		return localization;
+	}
+
+	public Velocity getVelocity() {
+		return velocity;
+	}
+
+	public Appearance getAppearance() {
+		return appearance;
+	}
+
+	public void move() {
+		localization.setY(localization.getY() + this.velocity.getY() * GameExecution.millisSinceLastUpdate);
 	}
 }

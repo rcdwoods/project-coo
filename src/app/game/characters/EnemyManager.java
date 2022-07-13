@@ -1,5 +1,6 @@
 package game.characters;
 
+import game.api.GameLib;
 import game.projectile.Projectile;
 import game.GameExecution;
 
@@ -10,13 +11,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EnemyManager {
-	private List<EnemyOne> enemiesOne;
-	private List<EnemyTwo> enemiesTwo;
-	private List<EnemyThree> enemiesThree;
+	private final List<EnemyOne> enemiesOne;
+	private final List<EnemyTwo> enemiesTwo;
+	private final List<EnemyThree> enemiesThree;
 	private long nextEnemyOneMustAppearAt;
 	private long nextEnemyTwoMustAppearAt;
 	private long nextEnemyThreeMustAppearAt;
 	private int enemiesTwoOnScreen;
+	private double enemiesTwoSpawn;
 
 	public EnemyManager() {
 		this.enemiesTwo = new ArrayList<>();
@@ -26,6 +28,7 @@ public class EnemyManager {
 		this.nextEnemyTwoMustAppearAt = System.currentTimeMillis() + 7000;
 		this.nextEnemyThreeMustAppearAt = System.currentTimeMillis() + 14000;
 		this.enemiesTwoOnScreen = 0;
+		this.enemiesTwoSpawn = Math.random() > 0.5 ? GameLib.WIDTH * 0.2 : GameLib.WIDTH * 0.8;
 		createEnemies();
 	}
 
@@ -54,13 +57,14 @@ public class EnemyManager {
 	private void activateEnemyTwo() {
 		Optional<EnemyTwo> firstInactiveEnemy = getFirstInactiveEnemyTwo();
 		if (GameExecution.currentTime > nextEnemyTwoMustAppearAt && firstInactiveEnemy.isPresent()) {
-			firstInactiveEnemy.get().activate();
+			firstInactiveEnemy.get().activateOnX(enemiesTwoSpawn);
 			enemiesTwoOnScreen++;
 
 			if (enemiesTwoOnScreen < 10) {
 				nextEnemyTwoMustAppearAt = GameExecution.currentTime + 120;
 			} else {
 				enemiesTwoOnScreen = 0;
+				enemiesTwoSpawn = Math.random() > 0.5 ? GameLib.WIDTH * 0.2 : GameLib.WIDTH * 0.8;
 				nextEnemyTwoMustAppearAt = (long) (GameExecution.currentTime + 3000 + Math.random() * 3000);
 			}
 		}

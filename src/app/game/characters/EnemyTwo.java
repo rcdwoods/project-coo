@@ -25,8 +25,8 @@ public class EnemyTwo extends Character {
 		this.gun = new TripleAleatoryGun(Direction.DOWN, new Velocity(0.30), ProjectileFactory.ENEMY);
 	}
 
-	public void activate() {
-		localization.setX(Math.random() > 0.5 ? GameLib.WIDTH * 0.2 : GameLib.WIDTH * 0.8);
+	public void activateOnX(double x) {
+		localization.setX(x);
 		localization.setY(-10.0);
 		velocity = new Velocity(0.42);
 		angle = (3 * Math.PI) / 2;
@@ -44,7 +44,7 @@ public class EnemyTwo extends Character {
 		updateLocalization();
 
 		if (previousY < threshold && localization.getY() >= threshold) modifyMovimentDirection();
-		if (mustShotNow() && this.gun.canShot()) gun.shotFrom(localization);
+		if (mustShotNow()) gun.shotFrom(localization);
 	}
 
 	private void updateLocalization() {
