@@ -27,12 +27,30 @@ public class Player extends Character {
 
 	public void verifyControl() {
 		if (!state.isActive()) return;
+		if (GameLib.iskeyPressed(GameLib.KEY_ESCAPE)) GameExecution.isRunning = false;
+	}
+
+	@Override
+	public void shot() {
+		if (!state.isActive()) return;
+		if (GameLib.iskeyPressed(GameLib.KEY_CONTROL)) gun.shotFrom(localization);
+	}
+
+	@Override
+	public void move() {
+		if (!state.isActive()) return;
 		if (GameLib.iskeyPressed(GameLib.KEY_UP)) localization.moveUp(velocity);
 		if (GameLib.iskeyPressed(GameLib.KEY_DOWN)) localization.moveDown(velocity);
 		if (GameLib.iskeyPressed(GameLib.KEY_LEFT)) localization.moveLeft(velocity);
 		if (GameLib.iskeyPressed(GameLib.KEY_RIGHT)) localization.moveRight(velocity);
-		if (GameLib.iskeyPressed(GameLib.KEY_CONTROL)) gun.shotFrom(localization);
-		if (GameLib.iskeyPressed(GameLib.KEY_ESCAPE)) GameExecution.isRunning = false;
+	}
+
+	@Override
+	public void updateState() {
+		if (state.hasAnExplosionJustEnded()) {
+			state.activate();
+			resetAttributes();
+		}
 	}
 
 	public void changeGun(Gun gun) {
@@ -48,12 +66,5 @@ public class Player extends Character {
 
 	private void resetAttributes() {
 		this.gun = new StraightGun(Direction.UP, new Velocity(1), ProjectileFactory.ALLY, 100);
-	}
-
-	public void updateState() {
-		if (state.hasAnExplosionJustEnded()) {
-			state.activate();
-			resetAttributes();
-		}
 	}
 }

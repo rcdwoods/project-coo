@@ -18,6 +18,8 @@ public abstract class Character {
 	protected Gun gun;
 
 	public abstract void updateState();
+	public abstract void move();
+	public abstract void shot();
 
 	public void verifyColisionWith(Localization localization) {
 		if (!state.isActive()) return;

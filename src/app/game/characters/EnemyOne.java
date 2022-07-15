@@ -4,7 +4,6 @@ import game.api.GameLib;
 import game.attributes.Appearance;
 import game.attributes.Format;
 import game.attributes.Localization;
-import game.projectile.Projectile;
 import game.GameExecution;
 import game.attributes.Velocity;
 import game.attributes.Direction;
@@ -14,7 +13,6 @@ import game.state.State;
 import game.state.StateName;
 
 import java.awt.*;
-import java.util.List;
 
 public class EnemyOne extends Character {
 	private double angle;
@@ -41,15 +39,20 @@ public class EnemyOne extends Character {
 		state.activate();
 	}
 
-	public void updateState() {
-		if (state.hasAnExplosionJustEnded() || hasLeaveScreen()) state.inactivate();
+	@Override
+	public void shot() {
 		if (!state.isActive()) return;
-		if (gun.canShot()) gun.shotFrom(localization);
-
-		updateLocalization();
+		gun.shotFrom(localization);
 	}
 
-	private void updateLocalization() {
+	@Override
+	public void updateState() {
+		if (state.hasAnExplosionJustEnded() || hasLeaveScreen()) state.inactivate();
+	}
+
+	@Override
+	public void move() {
+		if (!state.isActive()) return;
 		localization.setX(localization.getX() + velocity.getX() * Math.cos(angle) * GameExecution.millisSinceLastUpdate);
 		localization.setY(localization.getY() + velocity.getY() * Math.sin(angle) * GameExecution.millisSinceLastUpdate * (-1.0));
 		angle += rotationVelocity * GameExecution.millisSinceLastUpdate;

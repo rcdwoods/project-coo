@@ -53,6 +53,17 @@ public class Game {
 		for (Character enemy : enemyManager.getAllEnemies()) { enemy.updateState(); }
 	}
 
+	public void activateMovement() {
+		player.move();
+		for (Character enemy : enemyManager.getActiveEnemies()) { enemy.move(); }
+		for (Item item : itemManager.getItems()) { item.move(); }
+	}
+
+	public void activateShots() {
+		player.shot();
+		for (Character enemy : enemyManager.getActiveEnemies()) { enemy.shot(); }
+	}
+
 	public void activateEnemies() {
 		enemyManager.activateAvailableEnemies();
 	}

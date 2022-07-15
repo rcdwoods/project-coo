@@ -25,6 +25,17 @@ public class Projectile {
 		this.localization = new Localization(0, 0);
 	}
 
+	public void updateState() {
+		if (!state.isActive()) return;
+		if (hasLeaveScreen()) {
+			state.inactivate();
+			localization.setY(0);
+		} else {
+			localization.setX(localization.getX() + velocity.getX() * GameExecution.millisSinceLastUpdate);
+			localization.setY(localization.getY() + velocity.getY() * GameExecution.millisSinceLastUpdate);
+		}
+	}
+
 	public State getState() {
 		return state;
 	}
@@ -47,16 +58,5 @@ public class Projectile {
 
 	private boolean hasLeaveScreen() {
 		return localization.isOutOfScreen();
-	}
-
-	public void updateState() {
-		if (!state.isActive()) return;
-		if (hasLeaveScreen()) {
-			state.inactivate();
-			localization.setY(0);
-		} else {
-			localization.setX(localization.getX() + velocity.getX() * GameExecution.millisSinceLastUpdate);
-			localization.setY(localization.getY() + velocity.getY() * GameExecution.millisSinceLastUpdate);
-		}
 	}
 }

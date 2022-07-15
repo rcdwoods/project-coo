@@ -34,23 +34,27 @@ public class EnemyTwo extends Character {
 		state.activate();
 	}
 
-	public void updateState() {
-		if (state.hasAnExplosionJustEnded() || hasLeaveScreen()) state.inactivate();
-		if (!state.isActive()) return;
-
-		double previousY = localization.getY();
-		double threshold = GameLib.HEIGHT * 0.30;
-
-		updateLocalization();
-
-		if (previousY < threshold && localization.getY() >= threshold) modifyMovimentDirection();
+	@Override
+	public void shot() {
+		if (!getState().isActive()) return;
 		if (mustShotNow()) gun.shotFrom(localization);
 	}
 
-	private void updateLocalization() {
+	@Override
+	public void updateState() {
+		if (state.hasAnExplosionJustEnded() || hasLeaveScreen()) state.inactivate();
+	}
+
+	@Override
+	public void move() {
+		double previousY = localization.getY();
+		double threshold = GameLib.HEIGHT * 0.30;
+
 		localization.setX(localization.getX() + velocity.getX() * Math.cos(angle) * GameExecution.millisSinceLastUpdate);
 		localization.setY(localization.getY() + velocity.getY() * Math.sin(angle) * GameExecution.millisSinceLastUpdate * (-1.0));
 		angle += rotationVelocity * GameExecution.millisSinceLastUpdate;
+
+		if (previousY < threshold && localization.getY() >= threshold) modifyMovimentDirection();
 	}
 
 	private void modifyMovimentDirection() {

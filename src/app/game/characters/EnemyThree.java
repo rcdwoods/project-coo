@@ -37,25 +37,28 @@ public class EnemyThree extends Character {
 
 	public void updateState() {
 		if (state.hasAnExplosionJustEnded() || hasLeaveScreen()) state.inactivate();
-		if (!state.isActive()) return;
+	}
 
+	@Override
+	public void shot() {
+		if (!state.isActive()) return;
+		gun.shotFrom(localization);
+	}
+
+	@Override
+	public void move() {
 		double previousY = localization.getY();
 		double threshold = GameLib.HEIGHT * 0.30;
 
-		updateLocalization();
+		localization.setX(localization.getX() + velocity.getX() * Math.cos(angle) * GameExecution.millisSinceLastUpdate);
+		localization.setY(localization.getY() + velocity.getY() * Math.sin(angle) * GameExecution.millisSinceLastUpdate * (-1.0));
+		angle += rotationVelocity * GameExecution.millisSinceLastUpdate;
 
 		if (previousY < threshold && localization.getY() >= threshold) modifyMovimentDirection();
-		if (this.gun.canShot()) gun.shotFrom(localization);
 	}
 
 	private void modifyMovimentDirection() {
 		this.rotationVelocity = localization.getX() < GameLib.WIDTH / 2F ? 0.0005 : -0.0005;
-	}
-
-	private void updateLocalization() {
-		localization.setX(localization.getX() + velocity.getX() * Math.cos(angle) * GameExecution.millisSinceLastUpdate);
-		localization.setY(localization.getY() + velocity.getY() * Math.sin(angle) * GameExecution.millisSinceLastUpdate * (-1.0));
-		angle += rotationVelocity * GameExecution.millisSinceLastUpdate;
 	}
 
 	public boolean hasLeaveScreen() {

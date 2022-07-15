@@ -19,18 +19,6 @@ public abstract class Item {
 
 	public abstract void applyEffect();
 
-	public State getState() {
-		return state;
-	}
-
-	public Appearance getAppearance() {
-		return appearance;
-	}
-
-	public Localization getLocalization() {
-		return localization;
-	}
-
 	public void updateState() {
 		if (GameExecution.currentTime > nextAppear) state.activate();
 		if (localization.getY() >= GameLib.HEIGHT) {
@@ -38,10 +26,9 @@ public abstract class Item {
 			nextAppear = GameExecution.currentTime + appearDelay;
 			localization.setY(-10);
 		}
-		updateLocalization();
 	}
 
-	private void updateLocalization() {
+	public void move() {
 		if (!state.isActive()) return;
 		localization.setY(localization.getY() + velocity.getY() * GameExecution.millisSinceLastUpdate);
 	}
@@ -56,5 +43,17 @@ public abstract class Item {
 			nextAppear = GameExecution.currentTime + appearDelay;
 			localization.setY(-10);
 		}
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public Appearance getAppearance() {
+		return appearance;
+	}
+
+	public Localization getLocalization() {
+		return localization;
 	}
 }
